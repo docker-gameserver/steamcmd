@@ -21,20 +21,17 @@ RUN echo "Installing Packages ..." &&\
 	yum update -y &&\
 	yum install -y curl &&\
 	# Download and extract SteamCMD
-	mkdir -p /opt/steamcmd &&\
 	yum install -y glibc.i686 libstdc++.i686 &&\
-	cd /opt/steamcmd &&\
-	curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -vxz
+	cd /usr/local/bin &&\
+	curl -s http://media.steampowered.com/installer/steamcmd_linux.tar.gz | tar -vxz &&\
+	ln -s /usr/local/bin/steamcmd.sh /usr/local/bin/steamcmd
 
 # Update SteamCMD
-RUN timeout 30s /opt/steamcmd/steamcmd.sh; exit 0
+RUN /usr/local/bin/steamcmd.sh +quit
 
 ############################################################
 # Execution
 ############################################################
-
-# Working Directory
-WORKDIR /opt/steamcmd
 
 # Entrypoint
 CMD ["./steamcmd.sh"]
